@@ -7,7 +7,7 @@
  * @see  https://github.com/NKucza/smartmirror-gesture-recognition
  */
 
-Module.register('smartmirror-gesture-recognition',{
+Module.register('SmartMirror-Gesture-Recognition',{
 
 	defaults: {
 		
