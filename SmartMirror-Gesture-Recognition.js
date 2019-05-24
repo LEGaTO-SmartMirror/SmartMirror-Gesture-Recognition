@@ -31,9 +31,11 @@ Module.register('SmartMirror-Gesture-Recognition',{
 
 	socketNotificationReceived: function(notification, payload) {
 		var self = this;
-		if(notification === 'detected') {
-			this.sendNotification('GESTURE_DETECTED', payload);
+		if(notification === 'DETECTED_GESTURES') {
+			this.sendNotification('DETECTED_GESTURES', payload);
 			//console.log("[" + this.name + "] " + "gesture detected: " + payload);
-        };
+        }else if (notification === 'GESTURE_DET_FPS') {
+			this.sendNotification('GESTURE_DET_FPS', payload);
+		};
 	}
 });

@@ -98,7 +98,7 @@ if __name__ == "__main__":
 	weightPath = "data/yolov3-handtracing_last.weights"	
 	metaPath = "data/hand.data"
 
-	thresh = 0.5
+	thresh = 0.8
 	hier_thresh=.45
 	nms=.45 
 	debug= False
@@ -164,7 +164,7 @@ if __name__ == "__main__":
 
 		darknet.copy_image_from_bytes(darknet_image,frame_resized.tobytes())
 
-		dets = darknet.detect_image(netMain, metaMain, darknet_image, thresh=0.25)
+		dets = darknet.detect_image(netMain, metaMain, darknet_image, thresh=thresh)
 
 	
 		DetectionArray = np.where(DetectionArray >0 , DetectionArray -1 , 0)
@@ -190,7 +190,7 @@ if __name__ == "__main__":
 					i = j
 					break
 
-	
+
 			cv2.circle(image_cap , (int(x), int(y))  , 5,(55,55,255), 5)
 			cv2.rectangle(image_cap,pt1,pt2,(55,55,255), 3)
 			cv2.putText(image_cap, det[0].decode('utf-8'), (pt1[0], pt1[1] - 5), cv2.FONT_HERSHEY_DUPLEX, fontScale=1, color=(55,255,55), thickness=3)
@@ -281,7 +281,7 @@ if __name__ == "__main__":
 			if DetectionArray[yrel,xrel,i] == FPS:
 				DetectionArray[yrel,xrel,i] = 0			
 			if DetectionArray[yrel,xrel,i] == 2:
-				to_node("detected",{"name": str(det[0].decode("utf-8")), "center": (float("{0:.5f}".format(yrel/vertical_division)),float("{0:.5f}".format(xrel/horizontal_division))),"box": (float("{0:.5f}".format(w / darknet.network_width(netMain))),float("{0:.5f}".format(w / darknet.network_width(netMain))))})
+				to_node("detected",{"prob": det[1] ,"name": str(det[0].decode("utf-8")), "center": (float("{0:.5f}".format(yrel/vertical_division)),float("{0:.5f}".format(xrel/horizontal_division))),"box": (float("{0:.5f}".format(w / darknet.network_width(netMain))),float("{0:.5f}".format(w / darknet.network_width(netMain))))})
 
 		delta = time.time() - start_time
 		if (1.0 / FPS) - delta > 0:
