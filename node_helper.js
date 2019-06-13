@@ -30,7 +30,7 @@ module.exports = NodeHelper.create({
 				}
 			}
 			catch(err) {
-				console.log(message)
+				//console.log(message)
 				//console.log(err)
 			}
    		});
