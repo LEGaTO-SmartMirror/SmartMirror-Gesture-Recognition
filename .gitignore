@@ -1,3 +1,4 @@
 #ignore pyc...
 *.pyc
 *.back
+*.weights
