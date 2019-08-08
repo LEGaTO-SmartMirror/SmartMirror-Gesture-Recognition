@@ -10,7 +10,7 @@ module.exports = NodeHelper.create({
 		const self = this;		
 
 		
-		self.pyshell = new PythonShell('modules/' + this.name + '/python-scripts/gesture_recognition_track.py', {pythonPath: 'python', args: [JSON.stringify(this.config)]});
+		self.pyshell = new PythonShell('modules/' + this.name + '/python-scripts/gesture_recognition_track.py', {pythonPath: 'python3', args: [JSON.stringify(this.config)]});
     		
 		self.pyshell.on('message', function (message) {
 			try{
@@ -25,7 +25,7 @@ module.exports = NodeHelper.create({
 					//console.log("[" + self.name + "] detected gestures: " + JSON.stringify(parsed_message));
 					self.sendSocketNotification('DETECTED_GESTURES', parsed_message);
 				}else if (parsed_message.hasOwnProperty('GESTURE_DET_FPS')){
-					//console.log("[" + self.name + "] detected gestures: " + JSON.stringify(parsed_message));
+					//console.log("[" + self.name + "] gestures detection fps: " + JSON.stringify(parsed_message));
 					self.sendSocketNotification('GESTURE_DET_FPS', parsed_message.GESTURE_DET_FPS);
 				}
 			}
@@ -35,8 +35,6 @@ module.exports = NodeHelper.create({
 			}
    		});
   	},
-
-	//, mode: 'json'
 
   	// Subclass socketNotificationReceived received.
   	socketNotificationReceived: function(notification, payload) {
