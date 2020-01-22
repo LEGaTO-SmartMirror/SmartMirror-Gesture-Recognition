@@ -32,8 +32,9 @@ def to_node(type, message):
 	sys.stdout.flush()
 
 #Full HD image as default
-IMAGE_HEIGHT = 1080
-IMAGE_WIDTH = 1920
+IMAGE_HEIGHT = 1920
+IMAGE_WIDTH = 1080
+IMAGE_STREAM_PATH = "/dev/shm/camera_image"
 
 try:
 	to_node("status", "starting with config: " + sys.argv[1])
@@ -80,6 +81,8 @@ def convertToCenterWH(a,b,c,d):
 
 if __name__ == "__main__":
 
+	darknet.set_gpu(1)
+
 
 	BASE_DIR = os.path.dirname(__file__) + '/'
 	os.chdir(BASE_DIR)
@@ -100,10 +103,10 @@ if __name__ == "__main__":
 	preparare darknet neural network for hand gesture recognition
 	"""
 
-	#darknet.set_gpu(1)
+	
 
 	configPath = "cfg/yolov3-handtracing.cfg"
-	weightPath = "data/yolov3-handtracing_last.weights"	
+	weightPath = "data/yolov3-handtracing_91_percent.weights"	
 	metaPath = "data/hand.data"
 
 	thresh = 0.4
@@ -145,6 +148,7 @@ if __name__ == "__main__":
 
 		if FPS == 0:
 			time.sleep(1)
+			to_node("GESTURE_DET_FPS", float("{0:.2f}".format(0.0)))
 			continue
 
 		ret, frame = cap.read()
@@ -152,15 +156,15 @@ if __name__ == "__main__":
 			to_node("status", "ret was false..")
 			continue
 
-		#imgUMat = cv2.UMat(frame)
-		#frame_rgb = cv2.cvtColor(imgUMat, cv2.COLOR_BGR2RGB)
-		#frame_resized = cv2.UMat.get(cv2.resize(frame_rgb,
-        #                           (darknet.network_width(netMain),
-        #                            darknet.network_height(netMain)),
-        #                           interpolation=cv2.INTER_LINEAR))
+		imgUMat = cv2.UMat(frame)
+		frame_rgb = cv2.cvtColor(imgUMat, cv2.COLOR_BGR2RGB)
+		frame_resized = cv2.UMat.get(cv2.resize(frame_rgb,
+                                   (darknet.network_width(netMain),
+                                    darknet.network_height(netMain)),
+                                   interpolation=cv2.INTER_LINEAR))
 
-		frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-		frame_resized = cv2.resize(frame_rgb,(darknet.network_width(netMain),darknet.network_height(netMain)),interpolation=cv2.INTER_LINEAR)
+		#frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+		#frame_resized = cv2.resize(frame_rgb,(darknet.network_width(netMain),darknet.network_height(netMain)),interpolation=cv2.INTER_LINEAR)
 
 		darknet.copy_image_from_bytes(darknet_image,frame_resized.tobytes())
 
@@ -245,7 +249,6 @@ if __name__ == "__main__":
 				
 
 		achieved_FPS_counter += 1.0
-
 		delta = time.time() - start_time
 
 
