@@ -157,11 +157,21 @@ if __name__ == "__main__":
 			continue
 
 		imgUMat = cv2.UMat(frame)
-		frame_rgb = cv2.cvtColor(imgUMat, cv2.COLOR_BGR2RGB)
-		frame_resized = cv2.UMat.get(cv2.resize(frame_rgb,
-                                   (darknet.network_width(netMain),
-                                    darknet.network_height(netMain)),
-                                   interpolation=cv2.INTER_LINEAR))
+
+		if (darknet.network_width(netMain) != IMAGE_WIDTH) or ( darknet.network_width(netMain) != IMAGE_HEIGHT):
+
+			frame_resized_tmp = cv2.resize(	imgUMat, 
+					(darknet.network_width(netMain),
+					darknet.network_height(netMain)),                                    						interpolation=cv2.INTER_LINEAR)
+		
+			frame_rgb = cv2.cvtColor(frame_resized_tmp, cv2.COLOR_BGR2RGB)
+
+			frame_resized = cv2.UMat.get(frame_rgb)
+
+		else:
+
+			
+			frame_resized = cv2.UMat.get(cv2.cvtColor(imgUMat, cv2.COLOR_BGR2RGB))
 
 		#frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 		#frame_resized = cv2.resize(frame_rgb,(darknet.network_width(netMain),darknet.network_height(netMain)),interpolation=cv2.INTER_LINEAR)
