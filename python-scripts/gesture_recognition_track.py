@@ -32,9 +32,9 @@ def to_node(type, message):
 	sys.stdout.flush()
 
 #Full HD image as default
-IMAGE_HEIGHT = 1920
-IMAGE_WIDTH = 1080
-IMAGE_STREAM_PATH = "/dev/shm/camera_image"
+IMAGE_HEIGHT = 416
+IMAGE_WIDTH = 416
+IMAGE_STREAM_PATH = "/dev/shm/camera_small"
 
 try:
 	to_node("status", "starting with config: " + sys.argv[1])
@@ -50,7 +50,7 @@ except:
 	to_node("status", "starting without config as it was not readable/existent")	
 
 global global_FPS
-global_FPS = 1.0
+global_FPS = 30.0
 achieved_FPS = 0.0
 achieved_FPS_counter = 0.0
 
@@ -156,9 +156,11 @@ if __name__ == "__main__":
 			to_node("status", "ret was false..")
 			continue
 
-		imgUMat = cv2.UMat(frame)
+		
 
 		if (darknet.network_width(netMain) != IMAGE_WIDTH) or ( darknet.network_width(netMain) != IMAGE_HEIGHT):
+
+			imgUMat = cv2.UMat(frame)
 
 			frame_resized_tmp = cv2.resize(	imgUMat, 
 					(darknet.network_width(netMain),
@@ -170,8 +172,8 @@ if __name__ == "__main__":
 
 		else:
 
-			
-			frame_resized = cv2.UMat.get(cv2.cvtColor(imgUMat, cv2.COLOR_BGR2RGB))
+			#frame_resized = cv2.UMat.get(cv2.cvtColor(imgUMat, cv2.COLOR_BGR2RGB))
+			frame_resized = frame
 
 		#frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 		#frame_resized = cv2.resize(frame_rgb,(darknet.network_width(netMain),darknet.network_height(netMain)),interpolation=cv2.INTER_LINEAR)
