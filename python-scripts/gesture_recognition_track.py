@@ -109,7 +109,7 @@ if __name__ == "__main__":
 	weightPath = "data/yolov3-handtracing_91_percent.weights"	
 	metaPath = "data/hand.data"
 
-	thresh = 0.4
+	thresh = 0.6
 	hier_thresh=.45
 	nms=.45 
 	debug= False
