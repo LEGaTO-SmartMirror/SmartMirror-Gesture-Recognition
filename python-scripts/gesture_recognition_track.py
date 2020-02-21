@@ -246,6 +246,8 @@ if __name__ == "__main__":
 					detection_list.append({"TrackID": tracker[4] , "name": metaMain.names[key].decode('utf-8'), "w_h": (float("{0:.5f}".format(w_h[0])),float("{0:.5f}".format(w_h[1]))) ,"center": (float("{0:.5f}".format(xrel/horizontal_division)),float("{0:.5f}".format(yrel/vertical_division)))} )
 
 
+		to_node("DETECTED_GESTURES",detection_list)
+		"""
 		if not(not last_detection_list and not detection_list):		
 	
 			equality_counter = 0
@@ -257,7 +259,7 @@ if __name__ == "__main__":
 			if not (equality_counter == len(last_detection_list) == len(detection_list)):
 				to_node("DETECTED_GESTURES",detection_list)
 				last_detection_list = detection_list
-					
+		"""		
 				
 
 		achieved_FPS_counter += 1.0
